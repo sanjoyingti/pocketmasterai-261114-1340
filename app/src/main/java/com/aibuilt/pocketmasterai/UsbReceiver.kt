@@ -14,6 +14,9 @@ class UsbReceiver : BroadcastReceiver() {
             UsbManager.ACTION_USB_DEVICE_DETACHED -> {
                 // Reconnect logic lives in PocketMasterMidiManager / ViewModel
             }
+            UsbManager.ACTION_USB_PERMISSION -> {
+                // Permission result handling lives in PocketMasterMidiManager / ViewModel
+            }
         }
     }
 
