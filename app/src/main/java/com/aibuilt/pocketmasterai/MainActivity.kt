@@ -15,11 +15,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Theme(darkTheme = isSystemInDarkTheme(), content = {
+            PedalboardTheme(darkTheme = isSystemInDarkTheme()) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     PocketMasterApp()
                 }
-            })
+            }
         }
     }
 }

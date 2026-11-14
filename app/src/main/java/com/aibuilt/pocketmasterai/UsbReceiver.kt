@@ -3,7 +3,6 @@ package com.aibuilt.pocketmasterai
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.hardware.usb.UsbConstants.USB_PERMISSION
 import android.hardware.usb.UsbManager
 import android.util.Log
 
