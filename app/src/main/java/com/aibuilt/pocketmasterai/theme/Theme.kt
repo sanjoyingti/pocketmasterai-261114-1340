@@ -38,3 +38,9 @@ fun Theme(
         content = content
     )
 }
+
+/** Alias used by the preview so MainActivity can call PedalboardTheme(). */
+@Composable
+fun PedalboardTheme(content: @Composable () -> Unit) {
+    Theme(darkTheme = true, content = content)
+}
