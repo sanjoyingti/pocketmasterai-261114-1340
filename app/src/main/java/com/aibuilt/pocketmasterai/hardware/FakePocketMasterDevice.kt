@@ -7,34 +7,24 @@ import kotlinx.coroutines.flow.asStateFlow
 /** Offline hardware simulator mirroring tests/fake_device.py: echoes dump/names/params. */
 class FakePocketMasterDevice {
 
-    private var connectedState = false
-    var connected: StateFlow<Boolean> = MutableStateFlow(connectedState)
-
-    /** Current raw edit-buffer dump bytes (if any), parsed elsewhere into EditBuffer. */
-    var editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(null)
-
-    private var statusText: String? = null
-    var status: StateFlow<String?> = MutableStateFlow(statusText)
+    var connected: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var editBufferDump: MutableStateFlow<ByteArray?> = MutableStateFlow(null)
+    var status: MutableStateFlow<String?> = MutableStateFlow(null)
 
     suspend fun connect() {
-        connectedState = true
-        connected.value = connectedState
-        statusText = "Simulated device connected"
-        status.value = statusText
+        connected.value = true
+        status.value = "Simulated device connected"
     }
 
     suspend fun disconnect() {
-        connectedState = false
-        connected.value = connectedState
-        statusText = "Simulated device disconnected"
-        status.value = statusText
+        connected.value = false
+        status.value = "Simulated device disconnected"
     }
 
     suspend fun sysex(bytes: ByteArray): Boolean {
-        if (!connectedState) return false
+        if (!connected.value) return false
         kotlinx.coroutines.delay(20) // mimic packet delay
-        statusText = "Echo: ${bytes.joinToString(" ")}"
-        status.value = statusText
+        status.value = "Echo: ${bytes.joinToString(" ")}"
         return true
     }
 
@@ -47,8 +37,7 @@ class FakePocketMasterDevice {
             0x00.toByte()
         )
         editBufferDump.value = dump
-        statusText = "Fake dump received"
-        status.value = statusText
+        status.value = "Fake dump received"
     }
 
     companion object {
