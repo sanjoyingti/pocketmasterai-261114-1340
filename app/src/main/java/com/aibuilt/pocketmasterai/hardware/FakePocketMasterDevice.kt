@@ -7,35 +7,35 @@ import kotlinx.coroutines.flow.asStateFlow
 /** Offline hardware simulator mirroring tests/fake_device.py: echoes dump/names/params. */
 class FakePocketMasterDevice {
 
-    private var _connected = false
-    val connected: StateFlow<Boolean> = MutableStateFlow(false).apply { value = false }
+    private var connectedState = false
+    val connected: StateFlow<Boolean> = MutableStateFlow(connectedState)
 
     /** Current raw edit-buffer dump bytes (if any), parsed elsewhere into EditBuffer. */
-    private var _editBufferDump: ByteArray? = null
-    val editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(_editBufferDump)
+    private var editBufferDump: ByteArray? = null
+    val editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(editBufferDump)
 
-    private var _status: String? = null
-    val status: StateFlow<String?> = MutableStateFlow(_status)
+    private var statusText: String? = null
+    val status: StateFlow<String?> = MutableStateFlow(statusText)
 
     suspend fun connect() {
-        _connected = true
-        connected.value = true
-        _status = "Simulated device connected"
-        status.value = _status
+        connectedState = true
+        connected.value = connectedState
+        statusText = "Simulated device connected"
+        status.value = statusText
     }
 
     suspend fun disconnect() {
-        _connected = false
-        connected.value = false
-        _status = "Simulated device disconnected"
-        status.value = _status
+        connectedState = false
+        connected.value = connectedState
+        statusText = "Simulated device disconnected"
+        status.value = statusText
     }
 
     suspend fun sysex(bytes: ByteArray): Boolean {
-        if (!_connected) return false
+        if (!connectedState) return false
         kotlinx.coroutines.delay(20) // mimic packet delay
-        _status = "Echo: ${bytes.joinToString(" ")}"
-        status.value = _status
+        statusText = "Echo: ${bytes.joinToString(" ")}"
+        status.value = statusText
         return true
     }
 
@@ -47,10 +47,10 @@ class FakePocketMasterDevice {
             0x00.toByte(),
             0x00.toByte()
         )
-        _editBufferDump = dump
+        editBufferDump = dump
         editBufferDump.value = dump
-        _status = "Fake dump received"
-        status.value = _status
+        statusText = "Fake dump received"
+        status.value = statusText
     }
 
     companion object {

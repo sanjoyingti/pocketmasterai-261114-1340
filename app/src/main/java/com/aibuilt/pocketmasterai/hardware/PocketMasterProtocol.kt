@@ -22,7 +22,7 @@ object PocketMasterProtocol {
     fun nibbleExpand(value: Int): ByteArray {
         return byteArrayOf(
             (value and 0x0F and 0x7F).toByte(),
-            ((value ushr 4) and 0x0F and 0x7F).toByte()
+            ((value shr 4) and 0x0F and 0x7F).toByte()
         )
     }
 
@@ -77,13 +77,14 @@ object PocketMasterProtocol {
     }
 
     // Build preset volume: F0 len 42 <lo> <hi> F7 (2-byte value little-endian)
-    fun buildPresetVolume(value: Short): ByteArray {
+    fun buildPresetVolume(value: Int): ByteArray {
+        require(value in 0..0xFFFF) { "preset volume out of range" }
         return buildSysex(
             0x7E.toByte(),
             0x04.toByte(),
             CMD_PRESET_VOLUME,
             (value and 0xFF).toByte(),
-            ((value and 0xFF00).ushr(8)).toByte()
+            ((value and 0xFF00) shr 8).toByte()
         )
     }
 
@@ -93,7 +94,8 @@ object PocketMasterProtocol {
     }
 
     // Build param command: F0 len 48 <slot> <param> <lo> <hi> F7 (float32 as 2 bytes via nibble pack)
-    fun buildParam(slot: Byte, param: Byte, value: Short): ByteArray {
+    fun buildParam(slot: Byte, param: Byte, value: Int): ByteArray {
+        require(value in 0..0xFFFF) { "param value out of range" }
         return buildSysex(
             0x7E.toByte(),
             0x05.toByte(),
@@ -101,7 +103,7 @@ object PocketMasterProtocol {
             slot,
             param,
             (value and 0xFF).toByte(),
-            ((value and 0xFF00).ushr(8)).toByte()
+            ((value and 0xFF00) shr 8).toByte()
         )
     }
 
@@ -128,7 +130,7 @@ object PocketMasterProtocol {
 
     // Decode preset name record from dump: name field is 8 nibbles -> ASCII
     fun decodePresetName(nibbles: Int): String {
-        val chars = IntArray(8) { (nibbles ushr (6 - 2 * it)) and 0x3F }
+        val chars = IntArray(8) { (nibbles shr (6 - 2 * it)) and 0x3F }
         val byteChars = chars.map { c ->
             if (c in 0x40..0x5A) (c - 0x20).toChar() else c.toChar()
         }.map { it.code.toByte() }
