@@ -83,7 +83,7 @@ object PocketMasterProtocol {
             0x04.toByte(),
             CMD_PRESET_VOLUME,
             (value and 0xFF).toByte(),
-            ((value and 0xFF00) shr 8).toByte()
+            ((value and 0xFF00).ushr(8)).toByte()
         )
     }
 
@@ -101,7 +101,7 @@ object PocketMasterProtocol {
             slot,
             param,
             (value and 0xFF).toByte(),
-            ((value and 0xFF00) shr 8).toByte()
+            ((value and 0xFF00).ushr(8)).toByte()
         )
     }
 

@@ -7,28 +7,35 @@ import kotlinx.coroutines.flow.asStateFlow
 /** Offline hardware simulator mirroring tests/fake_device.py: echoes dump/names/params. */
 class FakePocketMasterDevice {
 
-    val connected = MutableStateFlow(false)
+    private var _connected = false
+    val connected: StateFlow<Boolean> = MutableStateFlow(false).apply { value = false }
 
     /** Current raw edit-buffer dump bytes (if any), parsed elsewhere into EditBuffer. */
-    val editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(null)
+    private var _editBufferDump: ByteArray? = null
+    val editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(_editBufferDump)
 
-    private val _status = MutableStateFlow<String?>(null)
-    val status: StateFlow<String?> = _status.asStateFlow()
+    private var _status: String? = null
+    val status: StateFlow<String?> = MutableStateFlow(_status)
 
     suspend fun connect() {
+        _connected = true
         connected.value = true
-        _status.value = "Simulated device connected"
+        _status = "Simulated device connected"
+        status.value = _status
     }
 
     suspend fun disconnect() {
+        _connected = false
         connected.value = false
-        _status.value = "Simulated device disconnected"
+        _status = "Simulated device disconnected"
+        status.value = _status
     }
 
     suspend fun sysex(bytes: ByteArray): Boolean {
-        if (!connected.value) return false
+        if (!_connected) return false
         kotlinx.coroutines.delay(20) // mimic packet delay
-        _status.value = "Echo: ${bytes.joinToString(" ")}"
+        _status = "Echo: ${bytes.joinToString(" ")}"
+        status.value = _status
         return true
     }
 
@@ -40,8 +47,10 @@ class FakePocketMasterDevice {
             0x00.toByte(),
             0x00.toByte()
         )
+        _editBufferDump = dump
         editBufferDump.value = dump
-        _status.value = "Fake dump received"
+        _status = "Fake dump received"
+        status.value = _status
     }
 
     companion object {
