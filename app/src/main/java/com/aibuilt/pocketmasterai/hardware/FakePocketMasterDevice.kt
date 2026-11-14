@@ -8,14 +8,13 @@ import kotlinx.coroutines.flow.asStateFlow
 class FakePocketMasterDevice {
 
     private var connectedState = false
-    val connected: StateFlow<Boolean> = MutableStateFlow(connectedState)
+    var connected: StateFlow<Boolean> = MutableStateFlow(connectedState)
 
     /** Current raw edit-buffer dump bytes (if any), parsed elsewhere into EditBuffer. */
-    private var editBufferDump: ByteArray? = null
-    val editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(editBufferDump)
+    var editBufferDump: StateFlow<ByteArray?> = MutableStateFlow(null)
 
     private var statusText: String? = null
-    val status: StateFlow<String?> = MutableStateFlow(statusText)
+    var status: StateFlow<String?> = MutableStateFlow(statusText)
 
     suspend fun connect() {
         connectedState = true
@@ -47,7 +46,6 @@ class FakePocketMasterDevice {
             0x00.toByte(),
             0x00.toByte()
         )
-        editBufferDump = dump
         editBufferDump.value = dump
         statusText = "Fake dump received"
         status.value = statusText
