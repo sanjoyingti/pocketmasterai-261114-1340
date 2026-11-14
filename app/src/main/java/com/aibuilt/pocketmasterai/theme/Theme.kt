@@ -29,8 +29,8 @@ private val DarkPedalboardPalette = darkColorScheme(
 )
 
 @Composable
-fun PedalboardTheme(
-    darkTheme: Boolean = true,
+fun Theme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     MaterialTheme(

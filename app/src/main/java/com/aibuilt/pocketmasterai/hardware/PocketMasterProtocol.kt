@@ -41,30 +41,30 @@ object PocketMasterProtocol {
     }
 
     // Command IDs
-    const val CMD_GLOBAL: Byte = 0x11.toByte()
-    const val CMD_PRESET_VOLUME: Byte = 0x42.toByte()
-    const val CMD_SELECT: Byte = 0x43.toByte()
-    const val CMD_CHAIN: Byte = 0x44.toByte()
-    const val CMD_EFFECT: Byte = 0x47.toByte()
-    const val CMD_PARAM: Byte = 0x48.toByte()
-    const val CMD_STATE: Byte = 0x49.toByte()
-    const val CMD_SAVE: Byte = 0x4A.toByte()
+    const val CMD_GLOBAL: Byte = 0x11
+    const val CMD_PRESET_VOLUME: Byte = 0x42
+    const val CMD_SELECT: Byte = 0x43
+    const val CMD_CHAIN: Byte = 0x44
+    const val CMD_EFFECT: Byte = 0x47
+    const val CMD_PARAM: Byte = 0x48
+    const val CMD_STATE: Byte = 0x49
+    const val CMD_SAVE: Byte = 0x4A
     // Queries
-    const val Q_GLOBALS: Byte = 0x10.toByte()
-    const val Q_IR_NAMES: Byte = 0x20.toByte()
-    const val Q_CLONE_NAMES: Byte = 0x24.toByte()
-    const val Q_PRESET_NAMES: Byte = 0x40.toByte()
-    const val Q_CURRENT_DUMP: Byte = 0x41.toByte()
-    const val Q_CURRENT_INDEX: Byte = 0x43.toByte()
-    const val Q_MODIFIED: Byte = 0x45.toByte()
+    const val Q_GLOBALS: Byte = 0x10
+    const val Q_IR_NAMES: Byte = 0x20
+    const val Q_CLONE_NAMES: Byte = 0x24
+    const val Q_PRESET_NAMES: Byte = 0x40
+    const val Q_CURRENT_DUMP: Byte = 0x41
+    const val Q_CURRENT_INDEX: Byte = 0x43
+    const val Q_MODIFIED: Byte = 0x45
 
     // Edit-buffer dump groups (T_*)
-    const val T_STATES: Byte = 0x01.toByte()
-    const val T_CHAIN: Byte = 0x02.toByte()
-    const val T_EFFECTS: Byte = 0x03.toByte()
-    const val T_PARAMS: Byte = 0x04.toByte()
-    const val T_VOLUME: Byte = 0x05.toByte()
-    const val T_TEMPO: Byte = 0x06.toByte()
+    const val T_STATES: Byte = 0x01
+    const val T_CHAIN: Byte = 0x02
+    const val T_EFFECTS: Byte = 0x03
+    const val T_PARAMS: Byte = 0x04
+    const val T_VOLUME: Byte = 0x05
+    const val T_TEMPO: Byte = 0x06
 
     // Build a query frame: F0 len Q_... F7
     fun buildQuery(query: Byte): ByteArray {
@@ -84,7 +84,7 @@ object PocketMasterProtocol {
             0x04.toByte(),
             CMD_PRESET_VOLUME,
             (value and 0xFF).toByte(),
-            ((value and 0xFF00) shr 8).toByte()
+            ((value and 0xFF00).shr(8)).toByte()
         )
     }
 
@@ -103,7 +103,7 @@ object PocketMasterProtocol {
             slot,
             param,
             (value and 0xFF).toByte(),
-            ((value and 0xFF00) shr 8).toByte()
+            ((value and 0xFF00).shr(8)).toByte()
         )
     }
 

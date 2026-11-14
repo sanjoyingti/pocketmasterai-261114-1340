@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.asStateFlow
 /** Offline hardware simulator mirroring tests/fake_device.py: echoes dump/names/params. */
 class FakePocketMasterDevice {
 
-    var connected: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    var editBufferDump: MutableStateFlow<ByteArray?> = MutableStateFlow(null)
-    var status: MutableStateFlow<String?> = MutableStateFlow(null)
+    val connected: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val editBufferDump: MutableStateFlow<ByteArray?> = MutableStateFlow(null)
+    val status: MutableStateFlow<String?> = MutableStateFlow(null)
 
     suspend fun connect() {
         connected.value = true
